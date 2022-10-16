@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Docs on 穆小康</title>
+    <link>https://eternal01.github.io/docs/</link>
+    <description>Recent content in Docs on 穆小康</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 16 Oct 2022 07:07:52 +0000</lastBuildDate><atom:link href="https://eternal01.github.io/docs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Abort Me</title>
+      <link>https://eternal01.github.io/docs/abort-me/</link>
+      <pubDate>Sun, 16 Oct 2022 07:07:52 +0000</pubDate>
+      
+      <guid>https://eternal01.github.io/docs/abort-me/</guid>
+      <description>这是我的简历</description>
+    </item>
+    
+  </channel>
+</rss>
