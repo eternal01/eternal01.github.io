@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="golang相关 #  ">
+<meta name="description" content="Golang 数据类型 #   值类型：string,int,float,bool,array,struct，初始化后内存分配在栈中 引用类型：map,slice,channel，初始化后内存分配在堆中  Golang 中 make 和 new 的区别 #   同为给变量分配内存 make与new对堆栈分配处理是相同的，编译器优先进行逃逸分析，逃逸的才分配到堆上，否则分配于栈中 new 可为所有类型分配内存，并将内存置为零，返回分配类型的指针 make 仅为channel,slice,map分配内存，并进行初始化，返回类型  Golang 中 slice 和 array 的区别 #   均为存储相同类型的一组数据 均可通过下标获取，len获取长度，cap获取容量 数组固定长度，访问和复制超过数组长度会越界，切片容量长度可变 数组是值类型，切片是引用类型，底层指向一个数组，修改切片实际修改的为底层数组，切片扩容后底层数组会改变，内存地址随之改变  for range 时地址会发生变化么 #  for k,v range slice 中，k,v在内存中只会存在一份，每次循环对k,v进行赋值操作，k,v内存地址始终不变，所以如果需要在循环中开启协程，应使用临时变量  defer 什么时候会修改返回值 #   defer执行顺序为LIFO，即先入后出。 defer一般用来做收尾工作，释放资源，紧跟在打开资源后，防止出现内存泄露 defer在操作函数返回有名返回值或者指针时会修改返回值  Golang 中解析 tag 是如何实现的 #  利用反射机制，反射是指计算机程序在运行时（Run time）可以访问、检测和修改它本身状态或行为的一种能力或动态知道给定数据对象的类型和结构，并有机会修改它。反射将接口变量转换成反射对象 Type 和 Value；反射可以通过反射对象 Value 还原成原先的接口变量；反射可以用来修改一个变量的值，前提是这个值可以被修改；注意：反射会一定程度上影响性能 ">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="Golang" />
-<meta property="og:description" content="golang相关 #  " />
+<meta property="og:description" content="Golang 数据类型 #   值类型：string,int,float,bool,array,struct，初始化后内存分配在栈中 引用类型：map,slice,channel，初始化后内存分配在堆中  Golang 中 make 和 new 的区别 #   同为给变量分配内存 make与new对堆栈分配处理是相同的，编译器优先进行逃逸分析，逃逸的才分配到堆上，否则分配于栈中 new 可为所有类型分配内存，并将内存置为零，返回分配类型的指针 make 仅为channel,slice,map分配内存，并进行初始化，返回类型  Golang 中 slice 和 array 的区别 #   均为存储相同类型的一组数据 均可通过下标获取，len获取长度，cap获取容量 数组固定长度，访问和复制超过数组长度会越界，切片容量长度可变 数组是值类型，切片是引用类型，底层指向一个数组，修改切片实际修改的为底层数组，切片扩容后底层数组会改变，内存地址随之改变  for range 时地址会发生变化么 #  for k,v range slice 中，k,v在内存中只会存在一份，每次循环对k,v进行赋值操作，k,v内存地址始终不变，所以如果需要在循环中开启协程，应使用临时变量  defer 什么时候会修改返回值 #   defer执行顺序为LIFO，即先入后出。 defer一般用来做收尾工作，释放资源，紧跟在打开资源后，防止出现内存泄露 defer在操作函数返回有名返回值或者指针时会修改返回值  Golang 中解析 tag 是如何实现的 #  利用反射机制，反射是指计算机程序在运行时（Run time）可以访问、检测和修改它本身状态或行为的一种能力或动态知道给定数据对象的类型和结构，并有机会修改它。反射将接口变量转换成反射对象 Type 和 Value；反射可以通过反射对象 Value 还原成原先的接口变量；反射可以用来修改一个变量的值，前提是这个值可以被修改；注意：反射会一定程度上影响性能 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://eternal01.github.io/2022/10/golang/" />
 <meta property="article:published_time" content="2022-10-16T08:38:32+00:00" />
@@ -16,7 +16,7 @@
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.a64c3fbabd2c7a93ee90dd37db9054580fcb37b8eef93f80b6fa286b030f64af.css" integrity="sha256-pkw/ur0sepPukN0325BUWA/LN7ju&#43;T&#43;AtvooawMPZK8=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.b45b2ffc32207d494e0610a60766e70cc7576f4e5322b65e1f1e165098db3bc5.js" integrity="sha256-tFsv/DIgfUlOBhCmB2bnDMdXb05TIrZeHx4WUJjbO8U=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.1c3cf2cdc97945da1cf5d21d8edc5aed1ed0259accc68d16476b6f2f315c9e34.js" integrity="sha256-HDzyzcl5Rdoc9dIdjtxa7R7QJZrMxo0WR2tvLzFcnjQ=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -138,7 +138,12 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#golang相关">golang相关</a></li>
+    <li><a href="#golang-数据类型"><strong>Golang 数据类型</strong></a></li>
+    <li><a href="#golang-中-make-和-new-的区别"><strong>Golang 中 make 和 new 的区别</strong></a></li>
+    <li><a href="#golang-中-slice-和-array-的区别"><strong>Golang 中 slice 和 array 的区别</strong></a></li>
+    <li><a href="#for-range-时地址会发生变化么"><strong>for range 时地址会发生变化么</strong></a></li>
+    <li><a href="#defer-什么时候会修改返回值"><strong>defer 什么时候会修改返回值</strong></a></li>
+    <li><a href="#golang-中解析-tag-是如何实现的"><strong>Golang 中解析 tag 是如何实现的</strong></a></li>
   </ul>
 </nav>
 
@@ -166,10 +171,54 @@ https://github.com/alex-shpak/hugo-book
 
 
 
-<h2 id="golang相关">
-  golang相关
-  <a class="anchor" href="#golang%e7%9b%b8%e5%85%b3">#</a>
+<h2 id="golang-数据类型">
+  <strong>Golang 数据类型</strong>
+  <a class="anchor" href="#golang-%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b">#</a>
 </h2>
+<ul>
+<li>值类型：string,int,float,bool,array,struct，初始化后内存分配在栈中</li>
+<li>引用类型：map,slice,channel，初始化后内存分配在堆中</li>
+</ul>
+<h2 id="golang-中-make-和-new-的区别">
+  <strong>Golang 中 make 和 new 的区别</strong>
+  <a class="anchor" href="#golang-%e4%b8%ad-make-%e5%92%8c-new-%e7%9a%84%e5%8c%ba%e5%88%ab">#</a>
+</h2>
+<ul>
+<li>同为给变量分配内存</li>
+<li>make与new对堆栈分配处理是相同的，编译器优先进行逃逸分析，逃逸的才分配到堆上，否则分配于栈中</li>
+<li>new 可为所有类型分配内存，并将内存置为零，返回分配类型的指针</li>
+<li>make 仅为channel,slice,map分配内存，并进行初始化，返回类型</li>
+</ul>
+<h2 id="golang-中-slice-和-array-的区别">
+  <strong>Golang 中 slice 和 array 的区别</strong>
+  <a class="anchor" href="#golang-%e4%b8%ad-slice-%e5%92%8c-array-%e7%9a%84%e5%8c%ba%e5%88%ab">#</a>
+</h2>
+<ul>
+<li>均为存储相同类型的一组数据</li>
+<li>均可通过下标获取，len获取长度，cap获取容量</li>
+<li>数组固定长度，访问和复制超过数组长度会越界，切片容量长度可变</li>
+<li>数组是值类型，切片是引用类型，底层指向一个数组，修改切片实际修改的为底层数组，切片扩容后底层数组会改变，内存地址随之改变</li>
+</ul>
+<h2 id="for-range-时地址会发生变化么">
+  <strong>for range 时地址会发生变化么</strong>
+  <a class="anchor" href="#for-range-%e6%97%b6%e5%9c%b0%e5%9d%80%e4%bc%9a%e5%8f%91%e7%94%9f%e5%8f%98%e5%8c%96%e4%b9%88">#</a>
+</h2>
+<pre><code>for k,v range slice 中，k,v在内存中只会存在一份，每次循环对k,v进行赋值操作，k,v内存地址始终不变，所以如果需要在循环中开启协程，应使用临时变量
+</code></pre>
+<h2 id="defer-什么时候会修改返回值">
+  <strong>defer 什么时候会修改返回值</strong>
+  <a class="anchor" href="#defer-%e4%bb%80%e4%b9%88%e6%97%b6%e5%80%99%e4%bc%9a%e4%bf%ae%e6%94%b9%e8%bf%94%e5%9b%9e%e5%80%bc">#</a>
+</h2>
+<ul>
+<li>defer执行顺序为LIFO，即先入后出。</li>
+<li>defer一般用来做收尾工作，释放资源，紧跟在打开资源后，防止出现内存泄露</li>
+<li>defer在操作函数返回有名返回值或者指针时会修改返回值</li>
+</ul>
+<h2 id="golang-中解析-tag-是如何实现的">
+  <strong>Golang 中解析 tag 是如何实现的</strong>
+  <a class="anchor" href="#golang-%e4%b8%ad%e8%a7%a3%e6%9e%90-tag-%e6%98%af%e5%a6%82%e4%bd%95%e5%ae%9e%e7%8e%b0%e7%9a%84">#</a>
+</h2>
+<pre><code>利用反射机制，反射是指计算机程序在运行时（Run time）可以访问、检测和修改它本身状态或行为的一种能力或动态知道给定数据对象的类型和结构，并有机会修改它。反射将接口变量转换成反射对象 Type 和 Value；反射可以通过反射对象 Value 还原成原先的接口变量；反射可以用来修改一个变量的值，前提是这个值可以被修改；注意：反射会一定程度上影响性能</code></pre>
 </article>
  
       
@@ -213,7 +262,12 @@ select(code.parentElement);if(navigator.clipboard){navigator.clipboard.writeText
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#golang相关">golang相关</a></li>
+    <li><a href="#golang-数据类型"><strong>Golang 数据类型</strong></a></li>
+    <li><a href="#golang-中-make-和-new-的区别"><strong>Golang 中 make 和 new 的区别</strong></a></li>
+    <li><a href="#golang-中-slice-和-array-的区别"><strong>Golang 中 slice 和 array 的区别</strong></a></li>
+    <li><a href="#for-range-时地址会发生变化么"><strong>for range 时地址会发生变化么</strong></a></li>
+    <li><a href="#defer-什么时候会修改返回值"><strong>defer 什么时候会修改返回值</strong></a></li>
+    <li><a href="#golang-中解析-tag-是如何实现的"><strong>Golang 中解析 tag 是如何实现的</strong></a></li>
   </ul>
 </nav>
 

@@ -9,13 +9,13 @@
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://eternal01.github.io/posts/" />
-<meta property="og:updated_time" content="2022-10-16T10:27:37+00:00" />
+<meta property="og:updated_time" content="2022-10-17T12:36:01+00:00" />
 <title>Posts | 穆小康</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.a64c3fbabd2c7a93ee90dd37db9054580fcb37b8eef93f80b6fa286b030f64af.css" integrity="sha256-pkw/ur0sepPukN0325BUWA/LN7ju&#43;T&#43;AtvooawMPZK8=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.b45b2ffc32207d494e0610a60766e70cc7576f4e5322b65e1f1e165098db3bc5.js" integrity="sha256-tFsv/DIgfUlOBhCmB2bnDMdXb05TIrZeHx4WUJjbO8U=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.1c3cf2cdc97945da1cf5d21d8edc5aed1ed0259accc68d16476b6f2f315c9e34.js" integrity="sha256-HDzyzcl5Rdoc9dIdjtxa7R7QJZrMxo0WR2tvLzFcnjQ=" crossorigin="anonymous"></script>
 <link rel="alternate" type="application/rss+xml" href="https://eternal01.github.io/posts/index.xml" title="穆小康" />
 <!--
 Made with Book Theme
@@ -170,6 +170,46 @@ https://github.com/alex-shpak/hugo-book
   
   <article class="markdown book-post">
     <h2>
+      <a href="/2022/10/k8s/">K8s</a>
+    </h2>
+    
+  <h5>October 17, 2022</h5>
+
+
+
+  
+
+  
+
+
+
+
+    <p>
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/2022/10/docker/">Docker</a>
+    </h2>
+    
+  <h5>October 17, 2022</h5>
+
+
+
+  
+
+  
+
+
+
+
+    <p>
+    </p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
       <a href="/2022/10/mysql/">Mysql</a>
     </h2>
     
@@ -184,7 +224,15 @@ https://github.com/alex-shpak/hugo-book
 
 
 
-    <p>mysql相关 #  
+    <p>Mysql 索引结构 #  使用二叉树查询的时候，查询的时间复杂度是O(log n)，查询的时间效率已经很快。但是二叉树存在一个问题是，每一个分支上，最多就只有两个分支，当数据量大的时候，就会导致树的高度很高，查询的时候，IO的次数就会增多，查询的效率就会有所下降。使用B树或者B+树，让一个节点，可以有多个分支，可以很好的降低树的高度，减少IO的次数，提升查询的效率。
+ B树的特点是每一个节点中都会存储key和数据，而B+树只有叶子节点才会存储数据信息（这里的数据信息 指 索引的数据信息。针对聚簇索引），其他的节点都只会存储key的信息。Mysql在查询的时候，因为其他节点的数据量少，可以一次性的在内存中加载更多的key的数据，以供查询使用。 B树的叶子节点之间是独立的，B+树的叶子节点之间有指针将叶子节点相连接起来。Mysql是一种关系型数据库，多个数据之间可能是存在一定的关系的，当查询某一个数据的时候，可能会查询和之相关的一些其他的数据，可以很好的支持范围查询。 B树的查询效率不稳定，B+树查询的效率稳定。当查询数据的时候，B树在遇到满足条件的数据之后，就会返回数据信息，不会走到叶子节点。但是B+树在查询的时候，无论如何都会走到叶子节点，才会获取到数据，并返回数据信息。 因为B+树的叶子节点不会存放数据信息（这里的数据信息指 完整的数据信息，包括了未添加索引的列的信息。即 索引中的 叶子节点，只会存放 索引列的数据，不包括未被索引的数据。聚簇索引包括所有数据，其他索引只包括 索引列和主键列），所以有更多的空间来存放key的信息，可以让树的高度更低，IO的次数更少，效率更高。  Mysql 索引类型，有何区别？ #    主键索引
+  唯一索引
+  普通索引
+  组合索引
+  全文索引
+ 聚簇索引：索引和数据处于同一个树结构中，叶子结点存储完整的数据。Innodb 使用聚簇索引 非聚簇索引：索引和数据不处于同一个树结构中，叶子结点存储的是指向数据的指针或地址信息，想获取完整数据需进行回表。MyIsam 使用非聚簇索引    Mysql 优化 #  - explain 查看sql执行计划 - explain extended 会在 explain 的基础上额外提供一些查询优化的信息。紧随其后通过 show warnings 命令可以得到优化后的查询语句，从而看出优化器优化了什么。 - explain partitions 相比 explain 多了个 partitions 字段。  id #  select的序列号，随select出现的顺序递增。id越大执行优先级越高；id相同则从上往下执行；id为null最后执行
+        <a href="/2022/10/mysql/">...</a>
+      
     </p>
   </article>
   
@@ -204,7 +252,14 @@ https://github.com/alex-shpak/hugo-book
 
 
 
-    <p>linux相关 #  
+    <p>shell 选择 #  查看当前系统使用默认shell
+echo $SHELL 列出所有可用shell
+cat /etc/shells 切换shell为zsh
+chsh -s /bin/zsh 安装oh my zsh
+sh -c &#34;$(curl -fsSL https://gitee.com/mirrors/oh-my-zsh/raw/master/tools/install.sh)&#34; 国内镜像安装
+sh -c &#34;$(curl -fsSL https://gitee.com/mirrors/oh-my-zsh/raw/master/tools/install.sh)&#34; 卸载oh my zsh
+uninstall_oh_my_zsh 配置oh my zsh插件
+vim ~/.zshrc 修改plugins=(git z extract) z 提供智能跳转，cd加强版 extract 解压缩插件，提供x别名，x解压文件 z,extract为自带插件，直接开启即可，不需要另行安装 
     </p>
   </article>
   
@@ -267,7 +322,7 @@ https://github.com/alex-shpak/hugo-book
 
 
 
-    <p>golang相关 #  
+    <p>Golang 数据类型 #   值类型：string,int,float,bool,array,struct，初始化后内存分配在栈中 引用类型：map,slice,channel，初始化后内存分配在堆中  Golang 中 make 和 new 的区别 #   同为给变量分配内存 make与new对堆栈分配处理是相同的，编译器优先进行逃逸分析，逃逸的才分配到堆上，否则分配于栈中 new 可为所有类型分配内存，并将内存置为零，返回分配类型的指针 make 仅为channel,slice,map分配内存，并进行初始化，返回类型  Golang 中 slice 和 array 的区别 #   均为存储相同类型的一组数据 均可通过下标获取，len获取长度，cap获取容量 数组固定长度，访问和复制超过数组长度会越界，切片容量长度可变 数组是值类型，切片是引用类型，底层指向一个数组，修改切片实际修改的为底层数组，切片扩容后底层数组会改变，内存地址随之改变  for range 时地址会发生变化么 #  for k,v range slice 中，k,v在内存中只会存在一份，每次循环对k,v进行赋值操作，k,v内存地址始终不变，所以如果需要在循环中开启协程，应使用临时变量  defer 什么时候会修改返回值 #   defer执行顺序为LIFO，即先入后出。 defer一般用来做收尾工作，释放资源，紧跟在打开资源后，防止出现内存泄露 defer在操作函数返回有名返回值或者指针时会修改返回值  Golang 中解析 tag 是如何实现的 #  利用反射机制，反射是指计算机程序在运行时（Run time）可以访问、检测和修改它本身状态或行为的一种能力或动态知道给定数据对象的类型和结构，并有机会修改它。反射将接口变量转换成反射对象 Type 和 Value；反射可以通过反射对象 Value 还原成原先的接口变量；反射可以用来修改一个变量的值，前提是这个值可以被修改；注意：反射会一定程度上影响性能 
     </p>
   </article>
   
