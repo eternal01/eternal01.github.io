@@ -50,7 +50,7 @@ rename key 删除指定key和value" />
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.a64c3fbabd2c7a93ee90dd37db9054580fcb37b8eef93f80b6fa286b030f64af.css" integrity="sha256-pkw/ur0sepPukN0325BUWA/LN7ju&#43;T&#43;AtvooawMPZK8=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.1c3cf2cdc97945da1cf5d21d8edc5aed1ed0259accc68d16476b6f2f315c9e34.js" integrity="sha256-HDzyzcl5Rdoc9dIdjtxa7R7QJZrMxo0WR2tvLzFcnjQ=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.f4d299a8942011ac916972766277b89b7c586d540424878df3e72d34f7a5241c.js" integrity="sha256-9NKZqJQgEayRaXJ2Yne4m3xYbVQEJIeN8&#43;ctNPelJBw=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -181,7 +181,6 @@ https://github.com/alex-shpak/hugo-book
     </li>
     <li><a href="#redis持久化策略"><strong>Redis持久化策略</strong></a></li>
     <li><a href="#redis淘汰策略"><strong>Redis淘汰策略</strong></a></li>
-    <li><a href="#redis对比关系型数据库如mysql优势是什么劣势是什么对比其他nosql类型数据库呢"><strong>Redis对比关系型数据库（如Mysql）优势是什么？劣势是什么？对比其他NoSql类型数据库呢？</strong></a></li>
   </ul>
 </nav>
 
@@ -494,14 +493,16 @@ zrevrank key member <span style="color:#75715e">#倒序</span>
   <strong>Redis淘汰策略</strong>
   <a class="anchor" href="#redis%e6%b7%98%e6%b1%b0%e7%ad%96%e7%95%a5">#</a>
 </h2>
-<h2 id="redis对比关系型数据库如mysql优势是什么劣势是什么对比其他nosql类型数据库呢">
-  <strong>Redis对比关系型数据库（如Mysql）优势是什么？劣势是什么？对比其他NoSql类型数据库呢？</strong>
-  <a class="anchor" href="#redis%e5%af%b9%e6%af%94%e5%85%b3%e7%b3%bb%e5%9e%8b%e6%95%b0%e6%8d%ae%e5%ba%93%e5%a6%82mysql%e4%bc%98%e5%8a%bf%e6%98%af%e4%bb%80%e4%b9%88%e5%8a%a3%e5%8a%bf%e6%98%af%e4%bb%80%e4%b9%88%e5%af%b9%e6%af%94%e5%85%b6%e4%bb%96nosql%e7%b1%bb%e5%9e%8b%e6%95%b0%e6%8d%ae%e5%ba%93%e5%91%a2">#</a>
-</h2>
-<ol>
-<li><strong>速度快</strong></li>
-<li><strong>支持数据类型丰富</strong></li>
-</ol>
+<ul>
+<li>noeviction 内存超过配置大小直接返回错误，不进行淘汰</li>
+<li>allkeys-lru 内存超限时，使用lru算法淘汰最近最少使用的键</li>
+<li>volatile-lru 内存超限时，使用lru算法淘汰设置了过期时间并且最近最少使用的键</li>
+<li>allkeys-random 内存超限时，随机淘汰键</li>
+<li>volatile-random 内存超限时，随机淘汰设置了过期时间的键</li>
+<li>volatile-ttl 淘汰快到过期时间的键</li>
+<li>volatile-lfu 淘汰设置了过期时间并且使用频率最低的键</li>
+<li>allkeys-lfu 淘汰使用频率最低的键</li>
+</ul>
 </article>
  
       
@@ -554,7 +555,6 @@ select(code.parentElement);if(navigator.clipboard){navigator.clipboard.writeText
     </li>
     <li><a href="#redis持久化策略"><strong>Redis持久化策略</strong></a></li>
     <li><a href="#redis淘汰策略"><strong>Redis淘汰策略</strong></a></li>
-    <li><a href="#redis对比关系型数据库如mysql优势是什么劣势是什么对比其他nosql类型数据库呢"><strong>Redis对比关系型数据库（如Mysql）优势是什么？劣势是什么？对比其他NoSql类型数据库呢？</strong></a></li>
   </ul>
 </nav>
 

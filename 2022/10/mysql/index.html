@@ -3,22 +3,14 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Mysql 索引结构 #  使用二叉树查询的时候，查询的时间复杂度是O(log n)，查询的时间效率已经很快。但是二叉树存在一个问题是，每一个分支上，最多就只有两个分支，当数据量大的时候，就会导致树的高度很高，查询的时候，IO的次数就会增多，查询的效率就会有所下降。使用B树或者B&#43;树，让一个节点，可以有多个分支，可以很好的降低树的高度，减少IO的次数，提升查询的效率。
- B树的特点是每一个节点中都会存储key和数据，而B&#43;树只有叶子节点才会存储数据信息（这里的数据信息 指 索引的数据信息。针对聚簇索引），其他的节点都只会存储key的信息。Mysql在查询的时候，因为其他节点的数据量少，可以一次性的在内存中加载更多的key的数据，以供查询使用。 B树的叶子节点之间是独立的，B&#43;树的叶子节点之间有指针将叶子节点相连接起来。Mysql是一种关系型数据库，多个数据之间可能是存在一定的关系的，当查询某一个数据的时候，可能会查询和之相关的一些其他的数据，可以很好的支持范围查询。 B树的查询效率不稳定，B&#43;树查询的效率稳定。当查询数据的时候，B树在遇到满足条件的数据之后，就会返回数据信息，不会走到叶子节点。但是B&#43;树在查询的时候，无论如何都会走到叶子节点，才会获取到数据，并返回数据信息。 因为B&#43;树的叶子节点不会存放数据信息（这里的数据信息指 完整的数据信息，包括了未添加索引的列的信息。即 索引中的 叶子节点，只会存放 索引列的数据，不包括未被索引的数据。聚簇索引包括所有数据，其他索引只包括 索引列和主键列），所以有更多的空间来存放key的信息，可以让树的高度更低，IO的次数更少，效率更高。  Mysql 索引类型，有何区别？ #    主键索引
-  唯一索引
-  普通索引
-  组合索引
-  全文索引
- 聚簇索引：索引和数据处于同一个树结构中，叶子结点存储完整的数据。Innodb 使用聚簇索引 非聚簇索引：索引和数据不处于同一个树结构中，叶子结点存储的是指向数据的指针或地址信息，想获取完整数据需进行回表。MyIsam 使用非聚簇索引    Mysql 优化 #  - explain 查看sql执行计划 - explain extended 会在 explain 的基础上额外提供一些查询优化的信息。紧随其后通过 show warnings 命令可以得到优化后的查询语句，从而看出优化器优化了什么。 - explain partitions 相比 explain 多了个 partitions 字段。  id #  select的序列号，随select出现的顺序递增。id越大执行优先级越高；id相同则从上往下执行；id为null最后执行">
+<meta name="description" content="关系型数据库和非关系型数据库（NoSQL）的区别 #  关系型数据库优点：
+ 使用关系模型来组织数据，容易理解 可以保持数据的一致性 数据更新的开销较小 支持复杂查询  非关系型数据库优点：
+ 无需经过SQL层的解析，读写效率高 基于键值对，读写性能高，易于拓展 可以支持多种类型数据的存储，图片、文档等 扩展（可分为内存性数据库以及文档型数据库，比如 Redis，MongoDB，HBase 等，适合场景：数据量大高可用的日志系统/地理位置存储系统）  DCL、DDL、DML #   DCL(DATA CONTROL LANGUAGE) 操作数据库用户、权限等 DDL(DATA DEFINITION LANGUAGE) 操作数据库、表结构、数据类型、表间约束等 DML(DATA MANIPULITION LANGUAGE) 操作数据库数据，增删改查等  Mysql 语句执行过程 #   客户端请求 &mdash;&gt; 连接器（验证用户身份，给予权限） 查询缓存（存在缓存则直接返回，不存在则继续下一步操作） 分析器（对sql进行语法分析等操作） 优化器（对执行的sql优化，选择最优的优化方案执行） 执行器（执行时会先查看用户是否拥有执行权限，调用存储引擎提供的接口） &mdash;&gt; 存储引擎（若开启查询缓存会缓存查询结果）  Mysql 使用索引的原因 #   提高数据查询效率  索引的三种常见数据结构和优缺点 #  三种常见的索引数据结构为哈希表、有序数组和搜索树   哈希表这种数据结构适用于等值查询，不适合范围查询。常用于NoSQL存储引擎。 有序数组只适用于静态存储引擎，等值查询和范围查询性能好，但更新数据成本高 搜索树（N叉树）由于读写性能上的优点以及适配磁盘访问模式，广泛用于关系型数据库存储引擎中  Mysql 索引结构 #  使用二叉树查询的时候，查询的时间复杂度是O(log n)，查询的时间效率已经很快。但是二叉树存在一个问题是，每一个分支上，最多就只有两个分支，当数据量大的时候，就会导致树的高度很高，查询的时候，IO的次数就会增多，查询的效率就会有所下降。使用B树或者B&#43;树，让一个节点，可以有多个分支，可以很好的降低树的高度，减少IO的次数，提升查询的效率。">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="Mysql" />
-<meta property="og:description" content="Mysql 索引结构 #  使用二叉树查询的时候，查询的时间复杂度是O(log n)，查询的时间效率已经很快。但是二叉树存在一个问题是，每一个分支上，最多就只有两个分支，当数据量大的时候，就会导致树的高度很高，查询的时候，IO的次数就会增多，查询的效率就会有所下降。使用B树或者B&#43;树，让一个节点，可以有多个分支，可以很好的降低树的高度，减少IO的次数，提升查询的效率。
- B树的特点是每一个节点中都会存储key和数据，而B&#43;树只有叶子节点才会存储数据信息（这里的数据信息 指 索引的数据信息。针对聚簇索引），其他的节点都只会存储key的信息。Mysql在查询的时候，因为其他节点的数据量少，可以一次性的在内存中加载更多的key的数据，以供查询使用。 B树的叶子节点之间是独立的，B&#43;树的叶子节点之间有指针将叶子节点相连接起来。Mysql是一种关系型数据库，多个数据之间可能是存在一定的关系的，当查询某一个数据的时候，可能会查询和之相关的一些其他的数据，可以很好的支持范围查询。 B树的查询效率不稳定，B&#43;树查询的效率稳定。当查询数据的时候，B树在遇到满足条件的数据之后，就会返回数据信息，不会走到叶子节点。但是B&#43;树在查询的时候，无论如何都会走到叶子节点，才会获取到数据，并返回数据信息。 因为B&#43;树的叶子节点不会存放数据信息（这里的数据信息指 完整的数据信息，包括了未添加索引的列的信息。即 索引中的 叶子节点，只会存放 索引列的数据，不包括未被索引的数据。聚簇索引包括所有数据，其他索引只包括 索引列和主键列），所以有更多的空间来存放key的信息，可以让树的高度更低，IO的次数更少，效率更高。  Mysql 索引类型，有何区别？ #    主键索引
-  唯一索引
-  普通索引
-  组合索引
-  全文索引
- 聚簇索引：索引和数据处于同一个树结构中，叶子结点存储完整的数据。Innodb 使用聚簇索引 非聚簇索引：索引和数据不处于同一个树结构中，叶子结点存储的是指向数据的指针或地址信息，想获取完整数据需进行回表。MyIsam 使用非聚簇索引    Mysql 优化 #  - explain 查看sql执行计划 - explain extended 会在 explain 的基础上额外提供一些查询优化的信息。紧随其后通过 show warnings 命令可以得到优化后的查询语句，从而看出优化器优化了什么。 - explain partitions 相比 explain 多了个 partitions 字段。  id #  select的序列号，随select出现的顺序递增。id越大执行优先级越高；id相同则从上往下执行；id为null最后执行" />
+<meta property="og:description" content="关系型数据库和非关系型数据库（NoSQL）的区别 #  关系型数据库优点：
+ 使用关系模型来组织数据，容易理解 可以保持数据的一致性 数据更新的开销较小 支持复杂查询  非关系型数据库优点：
+ 无需经过SQL层的解析，读写效率高 基于键值对，读写性能高，易于拓展 可以支持多种类型数据的存储，图片、文档等 扩展（可分为内存性数据库以及文档型数据库，比如 Redis，MongoDB，HBase 等，适合场景：数据量大高可用的日志系统/地理位置存储系统）  DCL、DDL、DML #   DCL(DATA CONTROL LANGUAGE) 操作数据库用户、权限等 DDL(DATA DEFINITION LANGUAGE) 操作数据库、表结构、数据类型、表间约束等 DML(DATA MANIPULITION LANGUAGE) 操作数据库数据，增删改查等  Mysql 语句执行过程 #   客户端请求 &mdash;&gt; 连接器（验证用户身份，给予权限） 查询缓存（存在缓存则直接返回，不存在则继续下一步操作） 分析器（对sql进行语法分析等操作） 优化器（对执行的sql优化，选择最优的优化方案执行） 执行器（执行时会先查看用户是否拥有执行权限，调用存储引擎提供的接口） &mdash;&gt; 存储引擎（若开启查询缓存会缓存查询结果）  Mysql 使用索引的原因 #   提高数据查询效率  索引的三种常见数据结构和优缺点 #  三种常见的索引数据结构为哈希表、有序数组和搜索树   哈希表这种数据结构适用于等值查询，不适合范围查询。常用于NoSQL存储引擎。 有序数组只适用于静态存储引擎，等值查询和范围查询性能好，但更新数据成本高 搜索树（N叉树）由于读写性能上的优点以及适配磁盘访问模式，广泛用于关系型数据库存储引擎中  Mysql 索引结构 #  使用二叉树查询的时候，查询的时间复杂度是O(log n)，查询的时间效率已经很快。但是二叉树存在一个问题是，每一个分支上，最多就只有两个分支，当数据量大的时候，就会导致树的高度很高，查询的时候，IO的次数就会增多，查询的效率就会有所下降。使用B树或者B&#43;树，让一个节点，可以有多个分支，可以很好的降低树的高度，减少IO的次数，提升查询的效率。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://eternal01.github.io/2022/10/mysql/" />
 <meta property="article:published_time" content="2022-10-16T10:27:37+00:00" />
@@ -28,7 +20,7 @@
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.a64c3fbabd2c7a93ee90dd37db9054580fcb37b8eef93f80b6fa286b030f64af.css" integrity="sha256-pkw/ur0sepPukN0325BUWA/LN7ju&#43;T&#43;AtvooawMPZK8=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.1c3cf2cdc97945da1cf5d21d8edc5aed1ed0259accc68d16476b6f2f315c9e34.js" integrity="sha256-HDzyzcl5Rdoc9dIdjtxa7R7QJZrMxo0WR2tvLzFcnjQ=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.f4d299a8942011ac916972766277b89b7c586d540424878df3e72d34f7a5241c.js" integrity="sha256-9NKZqJQgEayRaXJ2Yne4m3xYbVQEJIeN8&#43;ctNPelJBw=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -150,6 +142,11 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
+    <li><a href="#关系型数据库和非关系型数据库nosql的区别"><strong>关系型数据库和非关系型数据库（NoSQL）的区别</strong></a></li>
+    <li><a href="#dclddldml"><strong>DCL、DDL、DML</strong></a></li>
+    <li><a href="#mysql-语句执行过程"><strong>Mysql 语句执行过程</strong></a></li>
+    <li><a href="#mysql-使用索引的原因"><strong>Mysql 使用索引的原因</strong></a></li>
+    <li><a href="#索引的三种常见数据结构和优缺点"><strong>索引的三种常见数据结构和优缺点</strong></a></li>
     <li><a href="#mysql-索引结构"><strong>Mysql 索引结构</strong></a></li>
     <li><a href="#mysql-索引类型有何区别"><strong>Mysql 索引类型，有何区别？</strong></a></li>
     <li><a href="#mysql-优化"><strong>Mysql 优化</strong></a>
@@ -171,12 +168,16 @@ https://github.com/alex-shpak/hugo-book
     <li><a href="#mysql-索引失效"><strong>Mysql 索引失效</strong></a></li>
     <li><a href="#mysql-索引下推"><strong>Mysql 索引下推</strong></a></li>
     <li><a href="#mysql-索引合并"><strong>Mysql 索引合并</strong></a></li>
+    <li><a href="#mysql-change-buffer"><strong>Mysql change buffer</strong></a></li>
     <li><a href="#mysql-高可用"><strong>Mysql 高可用</strong></a>
       <ul>
         <li><a href="#主从复制"><strong>主从复制</strong></a></li>
       </ul>
     </li>
+    <li><a href="#mysql-两阶段提交"><strong>Mysql 两阶段提交</strong></a></li>
     <li><a href="#mysql-日志的录入格式有何区别"><strong>Mysql 日志的录入格式，有何区别？</strong></a></li>
+    <li><a href="#mysql-事务特性"><strong>Mysql 事务特性</strong></a></li>
+    <li><a href="#mysql-隔离级别"><strong>Mysql 隔离级别</strong></a></li>
   </ul>
 </nav>
 
@@ -204,6 +205,62 @@ https://github.com/alex-shpak/hugo-book
 
 
 
+<h2 id="关系型数据库和非关系型数据库nosql的区别">
+  <strong>关系型数据库和非关系型数据库（NoSQL）的区别</strong>
+  <a class="anchor" href="#%e5%85%b3%e7%b3%bb%e5%9e%8b%e6%95%b0%e6%8d%ae%e5%ba%93%e5%92%8c%e9%9d%9e%e5%85%b3%e7%b3%bb%e5%9e%8b%e6%95%b0%e6%8d%ae%e5%ba%93nosql%e7%9a%84%e5%8c%ba%e5%88%ab">#</a>
+</h2>
+<p>关系型数据库优点：</p>
+<ul>
+<li>使用关系模型来组织数据，容易理解</li>
+<li>可以保持数据的一致性</li>
+<li>数据更新的开销较小</li>
+<li>支持复杂查询</li>
+</ul>
+<p>非关系型数据库优点：</p>
+<ul>
+<li>无需经过SQL层的解析，读写效率高</li>
+<li>基于键值对，读写性能高，易于拓展</li>
+<li>可以支持多种类型数据的存储，图片、文档等</li>
+<li>扩展（可分为内存性数据库以及文档型数据库，比如 Redis，MongoDB，HBase 等，适合场景：数据量大高可用的日志系统/地理位置存储系统）</li>
+</ul>
+<h2 id="dclddldml">
+  <strong>DCL、DDL、DML</strong>
+  <a class="anchor" href="#dclddldml">#</a>
+</h2>
+<ul>
+<li>DCL(DATA CONTROL LANGUAGE) 操作数据库用户、权限等</li>
+<li>DDL(DATA DEFINITION LANGUAGE) 操作数据库、表结构、数据类型、表间约束等</li>
+<li>DML(DATA MANIPULITION LANGUAGE) 操作数据库数据，增删改查等</li>
+</ul>
+<h2 id="mysql-语句执行过程">
+  <strong>Mysql 语句执行过程</strong>
+  <a class="anchor" href="#mysql-%e8%af%ad%e5%8f%a5%e6%89%a7%e8%a1%8c%e8%bf%87%e7%a8%8b">#</a>
+</h2>
+<ol>
+<li>客户端请求 &mdash;&gt; 连接器（验证用户身份，给予权限）</li>
+<li>查询缓存（存在缓存则直接返回，不存在则继续下一步操作）</li>
+<li>分析器（对sql进行语法分析等操作）</li>
+<li>优化器（对执行的sql优化，选择最优的优化方案执行）</li>
+<li>执行器（执行时会先查看用户是否拥有执行权限，调用存储引擎提供的接口） &mdash;&gt; 存储引擎（若开启查询缓存会缓存查询结果）</li>
+</ol>
+<h2 id="mysql-使用索引的原因">
+  <strong>Mysql 使用索引的原因</strong>
+  <a class="anchor" href="#mysql-%e4%bd%bf%e7%94%a8%e7%b4%a2%e5%bc%95%e7%9a%84%e5%8e%9f%e5%9b%a0">#</a>
+</h2>
+<ul>
+<li>提高数据查询效率</li>
+</ul>
+<h2 id="索引的三种常见数据结构和优缺点">
+  <strong>索引的三种常见数据结构和优缺点</strong>
+  <a class="anchor" href="#%e7%b4%a2%e5%bc%95%e7%9a%84%e4%b8%89%e7%a7%8d%e5%b8%b8%e8%a7%81%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84%e5%92%8c%e4%bc%98%e7%bc%ba%e7%82%b9">#</a>
+</h2>
+<pre><code>三种常见的索引数据结构为哈希表、有序数组和搜索树
+</code></pre>
+<ul>
+<li>哈希表这种数据结构适用于等值查询，不适合范围查询。常用于NoSQL存储引擎。</li>
+<li>有序数组只适用于静态存储引擎，等值查询和范围查询性能好，但更新数据成本高</li>
+<li>搜索树（N叉树）由于读写性能上的优点以及适配磁盘访问模式，广泛用于关系型数据库存储引擎中</li>
+</ul>
 <h2 id="mysql-索引结构">
   <strong>Mysql 索引结构</strong>
   <a class="anchor" href="#mysql-%e7%b4%a2%e5%bc%95%e7%bb%93%e6%9e%84">#</a>
@@ -252,7 +309,7 @@ https://github.com/alex-shpak/hugo-book
   <strong>id</strong>
   <a class="anchor" href="#id">#</a>
 </h3>
-<p>select的序列号，随select出现的顺序递增。id越大执行优先级越高；id相同则从上往下执行；id为null最后执行</p>
+<p>select的序列号，随select出现的顺序递增。id越大执行优先级越高；id相同则从上往下执行；id为null为其他查询的聚合结果</p>
 <h3 id="select_type">
   <strong>select_type</strong>
   <a class="anchor" href="#select_type">#</a>
@@ -275,7 +332,7 @@ https://github.com/alex-shpak/hugo-book
 <td style="text-align:left">复杂查询最外层的select</td>
 </tr>
 <tr>
-<td style="text-align:left">sbuquery</td>
+<td style="text-align:left">subquery</td>
 <td style="text-align:left">包含在select中的子查询（不在from子句中）</td>
 </tr>
 <tr>
@@ -289,6 +346,14 @@ https://github.com/alex-shpak/hugo-book
 <tr>
 <td style="text-align:left">union result</td>
 <td style="text-align:left">从 union 临时表检索结果的 select</td>
+</tr>
+<tr>
+<td style="text-align:left">dependent union</td>
+<td style="text-align:left">顾名思义，第二个及之后的 union select</td>
+</tr>
+<tr>
+<td style="text-align:left">dependent subquery</td>
+<td style="text-align:left">顾名思义，第二个及之后的子查询的select</td>
 </tr>
 </tbody>
 </table>
@@ -440,19 +505,32 @@ https://github.com/alex-shpak/hugo-book
   <a class="anchor" href="#mysql-%e7%b4%a2%e5%bc%95%e5%a4%b1%e6%95%88">#</a>
 </h2>
 <ul>
-<li>索引列上进行操作
+<li>
+<p>索引列上进行操作</p>
 <ul>
 <li>类型转换</li>
 <li>计算</li>
 </ul>
 </li>
-<li>like 查询以%开头</li>
-<li>不满足最左前缀原则</li>
-<li>or 查询</li>
-<li>null列</li>
-<li>!= 判断</li>
-<li>查询条件发生隐式转换</li>
-<li>估计全表扫描比索引快</li>
+<li>
+<p>like 查询以%开头</p>
+</li>
+<li>
+<p>不满足最左前缀原则</p>
+</li>
+<li>
+<p>or 查询列中存在非索引列</p>
+</li>
+<li>
+<p>!= 判断</p>
+</li>
+<li>
+<p>查询条件发生隐式转换</p>
+</li>
+<li>
+<p>估计全表扫描比索引快</p>
+<p>null列会降低查询效率</p>
+</li>
 </ul>
 <h2 id="mysql-索引下推">
   <strong>Mysql 索引下推</strong>
@@ -471,6 +549,18 @@ https://github.com/alex-shpak/hugo-book
 <li>Index-Union</li>
 <li>Index-Sort-Union</li>
 </ul>
+<h2 id="mysql-change-buffer">
+  <strong>Mysql change buffer</strong>
+  <a class="anchor" href="#mysql-change-buffer">#</a>
+</h2>
+<pre><code>当需要更新一个数据页时，如果数据页在内存中则直接更新；而如果这个数据页不在内存中，在不影响数据一致性的前提下，Innodb会将这些更新操作缓存在change buffer中
+
+在下次读取该数据页时，将数据页读入内存，再执行change buffer中与这个页相关的操作。通过这种方式保证数据逻辑的正确性
+
+唯一索引的更新不能使用change buffer,只有普通索引可以使用该特性
+
+对于写多读少的业务来说，页面在写完以后马上被访问到的概率比较小，此时 change buffer 的使用效果最好。这种业务模型常见的就是账单类、日志类的系统
+</code></pre>
 <h2 id="mysql-高可用">
   <strong>Mysql 高可用</strong>
   <a class="anchor" href="#mysql-%e9%ab%98%e5%8f%af%e7%94%a8">#</a>
@@ -491,6 +581,13 @@ slave节点
 1. 启用中继日志
 2. 使用有复制权限的用户账号连接至主服务器，并启动复制线程
 </code></pre>
+<h2 id="mysql-两阶段提交">
+  <strong>Mysql 两阶段提交</strong>
+  <a class="anchor" href="#mysql-%e4%b8%a4%e9%98%b6%e6%ae%b5%e6%8f%90%e4%ba%a4">#</a>
+</h2>
+<p>执行器想要更新记录R &mdash;&gt; Innodb将记录R加载进Buffer Pool &mdash;&gt; 将记录R旧值写入undo log便于回滚 &mdash;&gt; 执行器更新内存中的数据（此时该数据页为脏页） &mdash;&gt; 执行器写redo log（prepare） &mdash;&gt; 执行器写binlog &mdash;&gt; 执行器写redo log（commit）</p>
+<pre><code>在恢复数据时，redolog 状态为 commit 则说明 binlog 也成功，直接恢复数据；如果 redolog 是 prepare，则需要查询对应的 binlog事务是否成功，决定是回滚还是执行。
+</code></pre>
 <h2 id="mysql-日志的录入格式有何区别">
   <strong>Mysql 日志的录入格式，有何区别？</strong>
   <a class="anchor" href="#mysql-%e6%97%a5%e5%bf%97%e7%9a%84%e5%bd%95%e5%85%a5%e6%a0%bc%e5%bc%8f%e6%9c%89%e4%bd%95%e5%8c%ba%e5%88%ab">#</a>
@@ -499,6 +596,28 @@ slave节点
 <li>statement 每一条会修改数据的SQL都会记录在binlog中，不需要记录每一行的变化，减少了binlog的日志量，节约了IO，提高了性能，由于sql的执行是有上下文的，因此在保存的时候需要保存相关的信息，同时还有一些使用了函数之类的语句无法被记录复制。</li>
 <li>row   不记录SQL语句上下文相关操作，仅保存哪条记录被修改。记录单元为每一行的改动，基本可以记录下所有变动，但由于很多操作会导致大量行的变动（如：alert table），因此这种模式的文件保存的信息太多，日志量太大，会降低性能</li>
 <li>mixed 一种折衷方案，普通操作记录statement记录，当无法使用statement记录时使用row记录</li>
+</ul>
+<h2 id="mysql-事务特性">
+  <strong>Mysql 事务特性</strong>
+  <a class="anchor" href="#mysql-%e4%ba%8b%e5%8a%a1%e7%89%b9%e6%80%a7">#</a>
+</h2>
+<pre><code>ACID，原子性（Atomicity）、一致性（Consistency）、隔离性（Isolation）、持久性（Durability）
+</code></pre>
+<ul>
+<li>原子性 事务中包含的操作要么全部成功，要么全部失败会滚</li>
+<li>一致性 事务执行前后必须处于一致性状态</li>
+<li>隔离性 多个并发事务之间要相互隔离，不相互影响</li>
+<li>持久性 事务执行完成对数据库的更改是永久的</li>
+</ul>
+<h2 id="mysql-隔离级别">
+  <strong>Mysql 隔离级别</strong>
+  <a class="anchor" href="#mysql-%e9%9a%94%e7%a6%bb%e7%ba%a7%e5%88%ab">#</a>
+</h2>
+<ul>
+<li>读未提交  （脏读、不可重复读、幻读）</li>
+<li>读已提交  （不可重复读、幻读）</li>
+<li>可重复读  （幻读）</li>
+<li>串行化</li>
 </ul>
 </article>
  
@@ -543,6 +662,11 @@ select(code.parentElement);if(navigator.clipboard){navigator.clipboard.writeText
   
 <nav id="TableOfContents">
   <ul>
+    <li><a href="#关系型数据库和非关系型数据库nosql的区别"><strong>关系型数据库和非关系型数据库（NoSQL）的区别</strong></a></li>
+    <li><a href="#dclddldml"><strong>DCL、DDL、DML</strong></a></li>
+    <li><a href="#mysql-语句执行过程"><strong>Mysql 语句执行过程</strong></a></li>
+    <li><a href="#mysql-使用索引的原因"><strong>Mysql 使用索引的原因</strong></a></li>
+    <li><a href="#索引的三种常见数据结构和优缺点"><strong>索引的三种常见数据结构和优缺点</strong></a></li>
     <li><a href="#mysql-索引结构"><strong>Mysql 索引结构</strong></a></li>
     <li><a href="#mysql-索引类型有何区别"><strong>Mysql 索引类型，有何区别？</strong></a></li>
     <li><a href="#mysql-优化"><strong>Mysql 优化</strong></a>
@@ -564,12 +688,16 @@ select(code.parentElement);if(navigator.clipboard){navigator.clipboard.writeText
     <li><a href="#mysql-索引失效"><strong>Mysql 索引失效</strong></a></li>
     <li><a href="#mysql-索引下推"><strong>Mysql 索引下推</strong></a></li>
     <li><a href="#mysql-索引合并"><strong>Mysql 索引合并</strong></a></li>
+    <li><a href="#mysql-change-buffer"><strong>Mysql change buffer</strong></a></li>
     <li><a href="#mysql-高可用"><strong>Mysql 高可用</strong></a>
       <ul>
         <li><a href="#主从复制"><strong>主从复制</strong></a></li>
       </ul>
     </li>
+    <li><a href="#mysql-两阶段提交"><strong>Mysql 两阶段提交</strong></a></li>
     <li><a href="#mysql-日志的录入格式有何区别"><strong>Mysql 日志的录入格式，有何区别？</strong></a></li>
+    <li><a href="#mysql-事务特性"><strong>Mysql 事务特性</strong></a></li>
+    <li><a href="#mysql-隔离级别"><strong>Mysql 隔离级别</strong></a></li>
   </ul>
 </nav>
 
