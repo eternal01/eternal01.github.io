@@ -3,28 +3,54 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Git配置 #  git config --global user.name &#34;&#34; git config --global user.email &#34;&#34; #全局配置用户名和邮箱，--global 全局 Git常用命令 #  初始化仓库
+<meta name="description" content="Git基本概念 # 工作区(Workspace)
+暂存区(Index)
+版本库(Repository)
+Commit
+Tree
+Blob
+HEAD
+Branch
+Tag
+Git配置 # git config --global user.name &#34;&#34; git config --global user.email &#34;&#34; #全局配置用户名和邮箱，--global 全局 Git常用命令 # 初始化仓库
 git init 添加本地修改至暂存区
 git add . #添加所有修改 git add -A #添加所有修改 git add filename #添加具体文件 提交本地修改
 git commit -m &#34;描述&#34; 拉取远程文件
-git pull originname originbranchname ">
+git pull originname originbranchname 合并分支
+git merge branchname 分支变基
+git rebase branchname 修改分支名
+git branch -m branchname newname 删除分支
+git branch -d branchname git branch -D branchname 切换分支">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="Git" />
-<meta property="og:description" content="Git配置 #  git config --global user.name &#34;&#34; git config --global user.email &#34;&#34; #全局配置用户名和邮箱，--global 全局 Git常用命令 #  初始化仓库
+<meta property="og:description" content="Git基本概念 # 工作区(Workspace)
+暂存区(Index)
+版本库(Repository)
+Commit
+Tree
+Blob
+HEAD
+Branch
+Tag
+Git配置 # git config --global user.name &#34;&#34; git config --global user.email &#34;&#34; #全局配置用户名和邮箱，--global 全局 Git常用命令 # 初始化仓库
 git init 添加本地修改至暂存区
 git add . #添加所有修改 git add -A #添加所有修改 git add filename #添加具体文件 提交本地修改
 git commit -m &#34;描述&#34; 拉取远程文件
-git pull originname originbranchname " />
+git pull originname originbranchname 合并分支
+git merge branchname 分支变基
+git rebase branchname 修改分支名
+git branch -m branchname newname 删除分支
+git branch -d branchname git branch -D branchname 切换分支" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://eternal01.github.io/2022/10/git/" />
+<meta property="og:url" content="https://eternal01.github.io/2022/10/git/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-10-16T10:25:55+00:00" />
 <meta property="article:modified_time" content="2022-10-16T10:25:55+00:00" />
 <title>Git | 穆小康</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
-<link rel="stylesheet" href="/book.min.a64c3fbabd2c7a93ee90dd37db9054580fcb37b8eef93f80b6fa286b030f64af.css" integrity="sha256-pkw/ur0sepPukN0325BUWA/LN7ju&#43;T&#43;AtvooawMPZK8=" crossorigin="anonymous">
+<link rel="stylesheet" href="/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.f4d299a8942011ac916972766277b89b7c586d540424878df3e72d34f7a5241c.js" integrity="sha256-9NKZqJQgEayRaXJ2Yne4m3xYbVQEJIeN8&#43;ctNPelJBw=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.78166b9d46e23e0ea915cb6887a30b633e7bc4fad10c8b6b9f6fa532271c19ba.js" integrity="sha256-eBZrnUbiPg6pFctoh6MLYz57xPrRDItrn2&#43;lMiccGbo=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -115,7 +141,7 @@ https://github.com/alex-shpak/hugo-book
 
 
 
-  <script>(function(){var menu=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script>
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
 
 
  
@@ -146,6 +172,7 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
+    <li><a href="#git基本概念"><strong>Git基本概念</strong></a></li>
     <li><a href="#git配置"><strong>Git配置</strong></a></li>
     <li><a href="#git常用命令"><strong>Git常用命令</strong></a></li>
   </ul>
@@ -175,27 +202,72 @@ https://github.com/alex-shpak/hugo-book
 
 
 
+<h2 id="git基本概念">
+  <strong>Git基本概念</strong>
+  <a class="anchor" href="#git%e5%9f%ba%e6%9c%ac%e6%a6%82%e5%bf%b5">#</a>
+</h2>
+<ul>
+<li>
+<p>工作区(Workspace)</p>
+</li>
+<li>
+<p>暂存区(Index)</p>
+</li>
+<li>
+<p>版本库(Repository)</p>
+</li>
+<li>
+<p>Commit</p>
+</li>
+<li>
+<p>Tree</p>
+</li>
+<li>
+<p>Blob</p>
+</li>
+<li>
+<p>HEAD</p>
+</li>
+<li>
+<p>Branch</p>
+</li>
+<li>
+<p>Tag</p>
+</li>
+</ul>
 <h2 id="git配置">
   <strong>Git配置</strong>
   <a class="anchor" href="#git%e9%85%8d%e7%bd%ae">#</a>
 </h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">git config --global user.name <span style="color:#e6db74">&#34;&#34;</span>
-git config --global user.email <span style="color:#e6db74">&#34;&#34;</span>   <span style="color:#75715e">#全局配置用户名和邮箱，--global 全局</span>
-</code></pre></div><h2 id="git常用命令">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-zsh" data-lang="zsh"><span style="display:flex;"><span>git config --global user.name <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>git config --global user.email <span style="color:#e6db74">&#34;&#34;</span>   <span style="color:#75715e">#全局配置用户名和邮箱，--global 全局</span>
+</span></span></code></pre></div><h2 id="git常用命令">
   <strong>Git常用命令</strong>
   <a class="anchor" href="#git%e5%b8%b8%e7%94%a8%e5%91%bd%e4%bb%a4">#</a>
 </h2>
 <p>初始化仓库</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">git init
-</code></pre></div><p>添加本地修改至暂存区</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">git add .   <span style="color:#75715e">#添加所有修改</span>
-git add -A  <span style="color:#75715e">#添加所有修改</span>
-git add filename    <span style="color:#75715e">#添加具体文件</span>
-</code></pre></div><p>提交本地修改</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">git commit -m <span style="color:#e6db74">&#34;描述&#34;</span>
-</code></pre></div><p>拉取远程文件</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">git pull originname originbranchname
-</code></pre></div></article>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-zsh" data-lang="zsh"><span style="display:flex;"><span>git init
+</span></span></code></pre></div><p>添加本地修改至暂存区</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-zsh" data-lang="zsh"><span style="display:flex;"><span>git add .   <span style="color:#75715e">#添加所有修改</span>
+</span></span><span style="display:flex;"><span>git add -A  <span style="color:#75715e">#添加所有修改</span>
+</span></span><span style="display:flex;"><span>git add filename    <span style="color:#75715e">#添加具体文件</span>
+</span></span></code></pre></div><p>提交本地修改</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-zsh" data-lang="zsh"><span style="display:flex;"><span>git commit -m <span style="color:#e6db74">&#34;描述&#34;</span>
+</span></span></code></pre></div><p>拉取远程文件</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-zsh" data-lang="zsh"><span style="display:flex;"><span>git pull originname originbranchname
+</span></span></code></pre></div><p>合并分支</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-zsh" data-lang="zsh"><span style="display:flex;"><span>git merge branchname
+</span></span></code></pre></div><p>分支变基</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-zsh" data-lang="zsh"><span style="display:flex;"><span>git rebase branchname
+</span></span></code></pre></div><p>修改分支名</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-zsh" data-lang="zsh"><span style="display:flex;"><span>git branch -m branchname newname
+</span></span></code></pre></div><p>删除分支</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-zsh" data-lang="zsh"><span style="display:flex;"><span>git branch -d branchname
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-zsh" data-lang="zsh"><span style="display:flex;"><span>git branch -D branchname
+</span></span></code></pre></div><p>切换分支</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-zsh" data-lang="zsh"><span style="display:flex;"><span>git checkout branchname
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-zsh" data-lang="zsh"><span style="display:flex;"><span>git switch branchname
+</span></span></code></pre></div></article>
  
       
 
@@ -211,9 +283,7 @@ git add filename    <span style="color:#75715e">#添加具体文件</span>
 
 
 
-  <script>(function(){function select(element){const selection=window.getSelection();const range=document.createRange();range.selectNodeContents(element);selection.removeAllRanges();selection.addRange(range);}
-document.querySelectorAll("pre code").forEach(code=>{code.addEventListener("click",function(event){if(window.getSelection().toString()){return;}
-select(code.parentElement);if(navigator.clipboard){navigator.clipboard.writeText(code.parentElement.textContent);}});});})();</script>
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
 
 
  
@@ -238,6 +308,7 @@ select(code.parentElement);if(navigator.clipboard){navigator.clipboard.writeText
   
 <nav id="TableOfContents">
   <ul>
+    <li><a href="#git基本概念"><strong>Git基本概念</strong></a></li>
     <li><a href="#git配置"><strong>Git配置</strong></a></li>
     <li><a href="#git常用命令"><strong>Git常用命令</strong></a></li>
   </ul>
